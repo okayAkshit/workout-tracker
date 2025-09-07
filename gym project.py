@@ -1,4 +1,5 @@
 import json
+from datetime import date
 
 ex=[]
 def load_data():
@@ -15,7 +16,7 @@ def save_data():
 
 def menu():
     print(f"Yeh buddy light weight baby")
-    print("\n1: Add excercise \n2: View all excercise\n3: If done escercise\n4: Exit")
+    print("\n1: Add excercise \n2: View all excercise\n3: If done escercise\n4: History\n5.exit")
 def add_ex():
     name=input("enter the excercise name you wanna do")
     try:
@@ -25,7 +26,7 @@ def add_ex():
     except ValueError:
         print("⚠️ Please enter numbers only for weight, sets, and reps.")
         return
-    ex.append({'name':name,'weight':weight,'sets':sets,"reps":reps,'done':False})
+    ex.append({'name':name,'weight':weight,'sets':sets,"reps":reps,'done':False,"date":str(date.today())})
     print(f"{name} is added!")
     save_data()
 def view():
@@ -50,6 +51,13 @@ def mark():
     except:
         print("enter a valid no.")
 load_data()
+def history():
+    completed=[e for e in ex if e.get("done")]
+    if not completed:
+        print("No excer cise done until now")
+    else:
+        for i,exercise in enumerate(completed):
+            print(f"{i+1}. {exercise['name']} - {exercise['weight']} kg, {exercise['sets']}x{exercise['reps']}")
 
 while True:
     menu()
@@ -62,6 +70,8 @@ while True:
         elif choice==3:
             mark()
         elif choice==4:
+            history()
+        elif choice==5:
             print("Be a monster my darling")
             completed = sum(1 for e in ex if e.get("done"))
             total = len(ex)
