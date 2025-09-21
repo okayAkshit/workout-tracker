@@ -1,7 +1,22 @@
 import json
 from datetime import date,datetime
+import random
 
 ex=[]
+def show_daily_quote():
+    quotes = [
+        "Push yourself, because no one else is going to do it for you.",
+        "Don’t limit your challenges, challenge your limits.",
+        "The body achieves what the mind believes.",
+        "Sweat is fat crying.",
+        "Go hard or go home!",
+        "Every rep counts, every set builds, every workout matters."
+    ]
+    today = date.today()
+    index = today.toordinal() % len(quotes)
+    print("\n🏋️ DAILY MOTIVATION 🏋️")
+    print(f"\"{quotes[index]}\"\n")
+
 def load_data():
     global ex
     try:
@@ -16,7 +31,7 @@ def save_data():
 
 def menu():
     print(f"Yeh buddy light weight baby")
-    print("\n1: Add excercise \n2: View all excercise\n3: If done escercise\n4: History\n5. Todat excercise\n6.exit")
+    print("\n1: Add excercise \n2: View all excercise\n3: If done escercise\n4: History\n5. Todat excercise\n6. Delete excercise\n7.exit")
 def add_ex():
     name=input("enter the excercise name you wanna do")
     try:
@@ -70,8 +85,28 @@ def view_today():
         for i ,excercise in enumerate(today_excercises):
             status="✓" if excercise.get("done",False) else "✗"
             print(f"{i+1}. {status} {excercise['name']}- {excercise['weight']} kg, {excercise['sets']}x{excercise['reps']}")
+def del_exc():
+    not_done=[i for i in ex if i.get("done",False)]
+    if not not_done:
+        print("you have allredy done every excercise so you dont need to delete any excercie")
+    else:
+        print(("\n❌ Exercises you can delete:"))
+        for i ,exercise in enumerate(not_done,start=1):
+            print(f"{i}. {exercise['name']}-{exercise['weight']} kg, {exercise['sets']}x{exercise['reps']}")
+        try:
+            choice=int(input("enter the number of the exercise you want to delete:"))
+            if 1<=choice>len(not_done):
+                to_delete=not_done[choice-1]
+                ex.remove()(to_delete)
+                save_data()
+                print(f"🗑️ Deleted: {to_delete['name']}")
+            else:
+                print("invalid choice")
+        except ValueError:
+            print("enter intefger value")
 
-
+load_data()
+show_daily_quote()
 while True:
     menu()
     try:
@@ -87,6 +122,8 @@ while True:
         elif choice==5:
             view_today()
         elif choice==6:
+            del_exc()
+        elif choice==7:
              print("Be a monster my darling")
              today_date = datetime.now().strftime("%Y-%m-%d")
              today_ex = [e for e in ex if e.get("date") == today_date]
